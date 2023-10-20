@@ -1,0 +1,200 @@
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname sw-g06
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$G5S7$RJwQqLWm355EjddaW/pQs1
+!
+username luis privilege 15 secret 5 $1$ySqH$6G3q2G1SzUf2qosPhHUkn.
+username lucas privilege 15 secret 5 $1$FJ14$fS5Lr4aA.l/M4sDiuHVca/
+username miqueias privilege 15 secret 5 $1$1Nlb$t7mvWZLMpS.NYgJfJ6TmV1
+!
+!
+no aaa new-model
+system mtu routing 1500
+no ip domain-lookup
+ip domain-name senac.br
+!
+!
+login block-for 120 attempts 4 within 60
+!
+!
+crypto pki trustpoint TP-self-signed-446285952
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-446285952
+ revocation-check none
+ rsakeypair TP-self-signed-446285952
+!
+!
+crypto pki certificate chain TP-self-signed-446285952
+ certificate self-signed 01
+  30820245 308201AE A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  30312E30 2C060355 04031325 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 34343632 38353935 32301E17 0D393330 33303130 30303131
+  305A170D 32303031 30313030 30303030 5A303031 2E302C06 03550403 1325494F
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3434 36323835
+  39353230 819F300D 06092A86 4886F70D 01010105 0003818D 00308189 02818100
+  E3BE7285 EF68E507 FB5536E0 9573B319 9B61EE8B F5DC522F EADF39B7 F0E886D7
+  81D6A546 732C4CA9 181C1BA8 4780AF7E 0333E3C0 073FF63B 431C83A0 2D023458
+  6295BB40 1725B515 EA09DAB1 F3F0CFE9 046BFEAE DBE20E87 F8D61B5D 7BF72071
+  5ED69853 C09FFDF4 D9366744 B575C786 269D1D3D 10280BB4 589F7F16 0FB93619
+  02030100 01A36F30 6D300F06 03551D13 0101FF04 05300301 01FF301A 0603551D
+  11041330 11820F73 772D6730 362E7365 6E61632E 6272301F 0603551D 23041830
+  168014E1 89EBE466 82286C8C 66459EAD D1120948 C021BD30 1D060355 1D0E0416
+  0414E189 EBE46682 286C8C66 459EADD1 120948C0 21BD300D 06092A86 4886F70D
+  01010405 00038181 00BD69C7 5B81CCAB A9B5B6FA F39B996A A8311261 37F5CC51
+  4B87E295 6DC69C5B 2D722231 635CC015 962680F9 2FFF56AD 2027EE3B DB015A05
+  78ACD718 8C9EBC3A 0C773A0C 3BD71FBC 2E4BF0C6 4D88955E 5C047E9F C37779F7
+  A5A0D7B5 5FDEE182 EA6A30E9 1511E2E7 CF9E60EB 75BD70BC F9920B83 59BAD6DE
+  33859E57 B1BBAA04 55
+  quit
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh time-out 60
+ip ssh authentication-retries 2
+ip ssh version 2
+!
+!
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+ description Interface de Acesso da VLAN 61 do Primeiro Usuario
+ switchport access vlan 61
+ switchport mode access
+!
+interface FastEthernet0/3
+ description Interface de Acesso da VLAN 62 do Segundo Usuario
+ switchport access vlan 62
+ switchport mode access
+!
+interface FastEthernet0/4
+ description Interface de Acesso da VLAN 63 do Terceiro Usuario
+ switchport access vlan 63
+ switchport mode access
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+ description Interface de Acesso da VLAN 65 Wireless
+ switchport access vlan 65
+ switchport mode access
+!
+interface FastEthernet0/7
+ shutdown
+!
+interface FastEthernet0/8
+ shutdown
+!
+interface FastEthernet0/9
+ shutdown
+!
+interface FastEthernet0/10
+ shutdown
+!
+interface FastEthernet0/11
+ shutdown
+!
+interface FastEthernet0/12
+ shutdown
+!
+interface FastEthernet0/13
+ shutdown
+!
+interface FastEthernet0/14
+ shutdown
+!
+interface FastEthernet0/15
+ shutdown
+!
+interface FastEthernet0/16
+ shutdown
+!
+interface FastEthernet0/17
+ shutdown
+!
+interface FastEthernet0/18
+ shutdown
+!
+interface FastEthernet0/19
+ shutdown
+!
+interface FastEthernet0/20
+ shutdown
+!
+interface FastEthernet0/21
+ shutdown
+!
+interface FastEthernet0/22
+ shutdown
+!
+interface FastEthernet0/23
+ shutdown
+!
+interface FastEthernet0/24
+ description Interface de Trunk com o Router 2911 do Grupo-06
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan60
+ description Interface SVI de Gerenciamento do Grupo-06
+ ip address 172.16.60.253 255.255.255.0
+!
+ip default-gateway 172.16.60.254
+ip classless
+ip http server
+ip http secure-server
+!
+!
+!
+!
+!
+banner motd ^C
+ ______     ______     __    __
+/\  == \   /\  ___\   /\ "-./  \
+\ \  __<   \ \  __\   \ \ \-./\ \
+ \ \_____\  \ \_____\  \ \_\ \ \_\
+  \/_____/   \/_____/   \/_/  \/_/
+ __   __   __     __   __     _____     ______
+/\ \ / /  /\ \   /\ "-.\ \   /\  __-.  /\  __ \
+\ \ \'/   \ \ \  \ \ \-.  \  \ \ \/\ \ \ \ \/\ \
+ \ \__|    \ \_\  \ \_\\"\_\  \ \____-  \ \_____\
+  \/_/      \/_/   \/_/ \/_/   \/____/   \/_____/
+^C
+!
+line con 0
+ exec-timeout 5 30
+ password 7 040A59552F324940081A
+ logging synchronous
+ login local
+line vty 0 4
+ exec-timeout 5 30
+ password 7 08701E1D290A00191308
+ logging synchronous
+ login local
+ transport input ssh
+line vty 5 15
+ login
+!
+end
